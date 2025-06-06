@@ -61,6 +61,9 @@
   
   <div id="popup">
     <div id="popupText">Game Over! Final Score: </div>
+    <div id="prizeText">Your prize is: </div>
+    <img id="prizeImage">
+    <div id="afterText">screenshot this page and send to MARISSA to redeem! NOTE: only ONE prize may be redeemed per year.</div>
     <button onclick="resetGame()">Reset Game</button>
   </div>
 
@@ -74,6 +77,7 @@
     const bucketCount = 8;
     const bucketWidth = canvas.width / bucketCount;
     const bucketScores = [100, 200, 300, 400, 500, 400, 300, 200];
+    const prizes = ["$15 amazon or temu credit", "used sock", "$55 shopping spree!!!!!!!!", "half a chipotle", "five original frog figurines", "dead ladybug", "$10 rainbet credit**** must be 18 or older to use", "mystery box"] 
     let totalScore = 0;
     let totalBalls = 0;
     let gameOverShown = false;
@@ -220,8 +224,10 @@
       if (totalBalls >= 30 && balls.length === 30 && balls.every(b => b.stopped) && !gameOverShown) {
         gameOverShown = true;
         setTimeout(() => {
-            document.getElementById('popupText').textContent = `Game Over! Final Score: ${totalScore}`;
+            document.getElementById('popupText').textContent = `Game Over! Final Score: ${totalScore} Prize:`;
+            document.getElementById('prizeImage').src = "image1.jpg";
             document.getElementById('popup').style.display = 'block';
+        
         }, 100);
       }
       requestAnimationFrame(animate);
