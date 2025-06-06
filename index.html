@@ -12,7 +12,8 @@
       align-items: center;
       background: #1e4901;
       color: #fff;
-      font-family: Arial, sans-serif;
+      font-family:"Comic Sans MS", "Comic Sans", cursive;
+
     }
     canvas {
       background: #418604;
@@ -24,6 +25,7 @@
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      font-family: inherit;
     }
     #scoreboard {
       margin-top: 10px;
@@ -41,12 +43,14 @@
       border: 2px solid white;
       font-size: 18px;
       z-index: 1000;
+      font-family: inherit;
     }
     #popup button {
       margin-top: 10px;
       padding: 5px 15px;
       font-size: 16px;
       cursor: pointer;
+      font-family: inherit;
     }
   </style>
 </head>
@@ -57,7 +61,6 @@
   
   <div id="popup">
     <div id="popupText">Game Over! Final Score: </div>
-    <button onclick="closePopup()">OK</button>
     <button onclick="resetGame()">Reset Game</button>
   </div>
 
