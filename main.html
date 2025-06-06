@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Plinko Game</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #1e4901;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      background: #418604;
+      border: 2px solid #fff;
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #scoreboard {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="dropBall()">Drop Ball</button>
+  <div id="scoreboard">Points: 0 | Balls: 0</div>
+  <canvas id="plinkoCanvas" width="400" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById("plinkoCanvas");
+    const ctx = canvas.getContext("2d");
+    const scoreboard = document.getElementById("scoreboard");
+
+    const pegs = [];
+    const balls = [];
+    const bucketCount = 8;
+    const bucketWidth = canvas.width / bucketCount;
+    const bucketScores = [100, 200, 300, 400, 500, 400, 300, 200];
+    let totalScore = 0;
+    let totalBalls = 0;
+    let gameOverShown = false;
+
+    class Peg {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 5;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+
+    class Ball {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.radius = 6;
+        this.vx = (Math.random() - 0.5) * 0.2;
+        this.vy = 0.5;
+        this.gravity = 0.25;
+        this.friction = 0.99;
+        this.stopped = false;
+        this.image = new Image();
+        this.image.src = "image1.jpg";
+      }
+      update() {
+        if (this.stopped) return;
+        this.vy += this.gravity;
+        this.vx *= this.friction;
+        this.vy *= this.friction;
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x - this.radius <= 0) {
+          this.x = this.radius;
+          this.vx = -this.vx;
+        } else if (this.x + this.radius >= canvas.width) {
+          this.x = canvas.width - this.radius;
+          this.vx = -this.vx;
+        }
+
+        for (const peg of pegs) {
+          const dx = this.x - peg.x;
+          const dy = this.y - peg.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const minDist = this.radius + peg.radius;
+
+          if (dist < minDist) {
+            const angle = Math.atan2(dy, dx);
+            const overlap = minDist - dist + 0.5;
+            this.x += Math.cos(angle) * overlap;
+            this.y += Math.sin(angle) * overlap;
+
+            const speed = Math.sqrt(this.vx ** 2 + this.vy ** 2);
+            const newAngle = angle + (Math.random() < 0.5 ? -1 : 1) * (Math.random() * Math.PI / 2);
+            this.vx = Math.cos(newAngle) * speed * 0.7;
+            this.vy = Math.sin(newAngle) * speed * 0.7;
+          }
+        }
+
+        if (this.y + this.radius >= canvas.height - 10) {
+          this.y = canvas.height - 10 - this.radius;
+          this.vy = 0;
+          this.vx = 0;
+          this.stopped = true;
+          const index = Math.floor(this.x / bucketWidth);
+          if (index >= 0 && index < bucketScores.length) {
+            totalScore += bucketScores[index];
+            updateScoreboard();
+          }
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#0ff";
+        ctx.fill();
+        ctx.closePath();
+        ctx.drawImage(this.image, this.x - (this.radius), (this.y - this.radius), this.radius * 8, this.radius *8);
+      }
+    }
+
+    function drawBuckets() {
+      const bucketHeight = 60;
+      ctx.fillStyle = "#fff";
+      ctx.font = "14px Calibri";
+      ctx.textAlign = "center";
+      for (let i = 0; i <= bucketCount; i++) {
+        const x = i * bucketWidth;
+        ctx.fillRect(x, canvas.height - bucketHeight, 2, bucketHeight);
+      }
+      for (let i = 0; i < bucketCount; i++) {
+        ctx.fillText(`${bucketScores[i]}`, i * bucketWidth + bucketWidth / 2, canvas.height - bucketHeight / 2 + 5);
+      }
+    }
+
+    function createGrid() {
+      const rows = 12;
+      const pegSpacingY = 40;
+      const pegSpacingX = canvas.width / (bucketCount + 1);
+
+      for (let row = 1; row < rows; row++) {
+        const pegsInRow = row + 1;
+        const startX = (canvas.width - (pegsInRow - 1) * pegSpacingX) / 2;
+        const y = 60 + row * pegSpacingY;
+
+        for (let col = 0; col < pegsInRow; col++) {
+          const x = startX + col * pegSpacingX;
+          pegs.push(new Peg(x, y));
+        }
+      }
+    }
+
+    function dropBall() {
+      if (totalBalls >= 30) return;
+      const pegSpacingX = canvas.width / (bucketCount + 1);
+      const centerX = canvas.width / 2;
+      const x = centerX + (Math.random() - 0.5) * pegSpacingX * 0.3;
+      balls.push(new Ball(x, 10));
+      totalBalls++;
+      updateScoreboard();
+    }
+    window.dropBall = dropBall;
+
+    function updateScoreboard() {
+      scoreboard.textContent = `Points: ${totalScore} | Balls: ${totalBalls}`;
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const peg of pegs) peg.draw();
+      drawBuckets();
+      for (const ball of balls) {
+        ball.update();
+        ball.draw();
+      }
+      if (totalBalls >= 30 && balls.length === 30 && balls.every(b => b.stopped) && !gameOverShown) {
+        gameOverShown = true;
+        setTimeout(() => {
+          alert(`Game Over! Final Score: ${totalScore}`);
+        }, 100);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    createGrid();
+    animate();
+  </script>
+</body>
+</html>
