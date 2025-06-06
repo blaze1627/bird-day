@@ -77,7 +77,8 @@
     const bucketCount = 8;
     const bucketWidth = canvas.width / bucketCount;
     const bucketScores = [50, 75, 100, 400, 500, 100, 75, 50];
-    const prizes = ["$15 amazon or temu credit", "used sock", "$55 shopping spree!!!!!!!!", "half a chipotle", "five original frog figurines", "dead ladybug", "$10 rainbet credit**** must be 18 or older to use", "mystery box"] 
+    const prizes = ["$15 amazon or temu credit", "used sock", "$55 shopping spree!!!!!!!!", "half a chipotle", "five original frog figurines", "dead ladybug", "$10 rainbet credit**** must be 18 or older to use", "mystery box"]; 
+    const prizeimg = ["Temu.webp", "sock1.webp", "image1.jpg", "chipot.png", "frogs1.png", "ladybug.webp", "rian.jpg", "image1.jpg"];
     let totalScore = 0;
     let totalBalls = 17;
     let gameOverShown = false;
@@ -108,7 +109,7 @@
         this.friction = 0.99;
         this.stopped = false;
         this.image = new Image();
-        this.image.src = "image1.jpg";
+        this.image.src = "unknown.png";
       }
       update() {
         if (this.stopped) return;
@@ -227,7 +228,7 @@
             var randseed = Math.floor(Math.random() * 7); 
             document.getElementById('popupText').textContent = `Game Over! Final Score: ${totalScore} Prize:`;
             document.getElementById('prizeText').textContent = `Your prize is: ${prizes[randseed]}`;
-            document.getElementById('prizeImage').src = "image1.jpg";
+            document.getElementById('prizeImage').src = prizeimg[randseed];
             document.getElementById('popup').style.display = 'block';
         
         }, 100);
