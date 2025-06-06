@@ -76,7 +76,7 @@
     const balls = []; 
     const bucketCount = 8;
     const bucketWidth = canvas.width / bucketCount;
-    const bucketScores = [100, 200, 300, 400, 500, 400, 300, 200];
+    const bucketScores = [50, 75, 100, 400, 500, 100, 75, 50];
     const prizes = ["$15 amazon or temu credit", "used sock", "$55 shopping spree!!!!!!!!", "half a chipotle", "five original frog figurines", "dead ladybug", "$10 rainbet credit**** must be 18 or older to use", "mystery box"] 
     let totalScore = 0;
     let totalBalls = 0;
@@ -226,6 +226,7 @@
         setTimeout(() => {
             var randseed = Math.floor(Math.random() * 7); 
             document.getElementById('popupText').textContent = `Game Over! Final Score: ${totalScore} Prize:`;
+            document.getElementById('prizeText').textContent = `Your prize is: ${prizes[randseed]}`;
             document.getElementById('prizeImage').src = "image1.jpg";
             document.getElementById('popup').style.display = 'block';
         
