@@ -226,7 +226,7 @@
         gameOverShown = true;
         setTimeout(() => {
             var randseed = Math.floor(Math.random() * 7); 
-            document.getElementById('popupText').textContent = `Game Over! Final Score: ${totalScore} Prize:`;
+            document.getElementById('popupText').textContent = `Game Over! Final Score: ${totalScore}`;
             document.getElementById('prizeText').textContent = `Your prize is: ${prizes[randseed]}`;
             document.getElementById('prizeImage').src = prizeimg[randseed];
             document.getElementById('popup').style.display = 'block';
@@ -248,6 +248,7 @@
       totalScore = 0;
       totalBalls = 17;
       gameOverShown = false;
+      var randseed = Math.floor(Math.random() * 7); 
       updateScoreboard();
     }
   </script>
