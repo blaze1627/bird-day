@@ -29,6 +29,25 @@
       margin-top: 10px;
       font-size: 18px;
     }
+     #popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #098500;
+      color: white;
+      padding: 20px;
+      border: 2px solid white;
+      font-size: 18px;
+      z-index: 1000;
+    }
+    #popup button {
+      margin-top: 10px;
+      padding: 5px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -192,7 +211,8 @@
       if (totalBalls >= 30 && balls.length === 30 && balls.every(b => b.stopped) && !gameOverShown) {
         gameOverShown = true;
         setTimeout(() => {
-          alert(`Game Over! Final Score: ${totalScore}`);
+            document.getElementById('popupText').textContent = `Game Over! Final Score: ${totalScore}`;
+            document.getElementById('popup').style.display = 'block';
         }, 100);
       }
       requestAnimationFrame(animate);
