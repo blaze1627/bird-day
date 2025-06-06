@@ -221,7 +221,7 @@
         ball.update();
         ball.draw();
       }
-      if (totalBalls <= 0 && balls.length === 0 && balls.every(b => b.stopped) && !gameOverShown) {
+      if (totalBalls <= 0 && balls.length === 17 && balls.every(b => b.stopped) && !gameOverShown) {
         gameOverShown = true;
         setTimeout(() => {
             var randseed = Math.floor(Math.random() * 7); 
