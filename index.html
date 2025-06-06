@@ -54,6 +54,12 @@
   <button onclick="dropBall()">Drop Ball</button>
   <div id="scoreboard">Points: 0 | Balls: 0</div>
   <canvas id="plinkoCanvas" width="400" height="600"></canvas>
+  
+  <div id="popup">
+    <div id="popupText">Game Over! Final Score: </div>
+    <button onclick="closePopup()">OK</button>
+    <button onclick="resetGame()">Reset Game</button>
+  </div>
 
   <script>
     const canvas = document.getElementById("plinkoCanvas");
@@ -220,6 +226,18 @@
 
     createGrid();
     animate();
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+
+    function resetGame() {
+      document.getElementById('popup').style.display = 'none';
+      balls.length = 0;
+      totalScore = 0;
+      totalBalls = 0;
+      gameOverShown = false;
+      updateScoreboard();
+    }
   </script>
 </body>
 </html>
