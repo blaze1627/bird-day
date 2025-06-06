@@ -56,7 +56,7 @@
 </head>
 <body>
   <button onclick="dropBall()">Drop Ball</button>
-  <div id="scoreboard">Points: 0 | Balls: 0</div>
+  <div id="scoreboard">Points: 0 | Balls: 17</div>
   <canvas id="plinkoCanvas" width="400" height="600"></canvas>
   
   <div id="popup">
@@ -79,7 +79,7 @@
     const bucketScores = [50, 75, 100, 400, 500, 100, 75, 50];
     const prizes = ["$15 amazon or temu credit", "used sock", "$55 shopping spree!!!!!!!!", "half a chipotle", "five original frog figurines", "dead ladybug", "$10 rainbet credit**** must be 18 or older to use", "mystery box"] 
     let totalScore = 0;
-    let totalBalls = 0;
+    let totalBalls = 17;
     let gameOverShown = false;
 
     class Peg {
@@ -199,12 +199,12 @@
     }
 
     function dropBall() {
-      if (totalBalls >= 30) return;
+      if (totalBalls <= 0) return;
       const pegSpacingX = canvas.width / (bucketCount + 1);
       const centerX = canvas.width / 2;
       const x = centerX + (Math.random() - 0.5) * pegSpacingX * 0.3;
       balls.push(new Ball(x, 10));
-      totalBalls++;
+      totalBalls--;
       updateScoreboard();
     }
     window.dropBall = dropBall;
@@ -221,7 +221,7 @@
         ball.update();
         ball.draw();
       }
-      if (totalBalls >= 30 && balls.length === 30 && balls.every(b => b.stopped) && !gameOverShown) {
+      if (totalBalls <= 0 && balls.length === 0 && balls.every(b => b.stopped) && !gameOverShown) {
         gameOverShown = true;
         setTimeout(() => {
             var randseed = Math.floor(Math.random() * 7); 
@@ -245,7 +245,7 @@
       document.getElementById('popup').style.display = 'none';
       balls.length = 0;
       totalScore = 0;
-      totalBalls = 0;
+      totalBalls = 17;
       gameOverShown = false;
       updateScoreboard();
     }
